@@ -10,7 +10,6 @@
 
 <p align="center">
   <a href="https://github.com/t3gemstone/ardupilot"><img alt="ArduPilot fork" src="https://img.shields.io/badge/T3_Gemstone-ardupilot_fork-black.svg"></a>
-  <a href="kaynak-belge"><img alt="Kaynak belge" src="https://img.shields.io/badge/Kaynak-belge-orange.svg"></a>
   <a href="https://docs.t3gemstone.org/tr/projects/ardupilot"><img alt="Resmi ArduPilot sayfası" src="https://img.shields.io/badge/T3_Gemstone-ardupilot_docs-green.svg"></a>
   <a href="https://docs.t3gemstone.org"><img alt="T3 Gemstone Docs" src="https://img.shields.io/badge/T3_Gemstone-docs-blue.svg"></a>
 </p>
@@ -25,7 +24,6 @@
 
 - [1. Genel Bakış ve Gerekli Malzemeler](docs/01-genel-bakis-ve-gereksinimler.md)
 - [Tüm dokümanlar](docs)
-- [Orijinal belge](kaynak-belge)
 
 ## Kapsam
 
