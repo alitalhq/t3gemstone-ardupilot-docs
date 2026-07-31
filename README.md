@@ -67,6 +67,6 @@ Bir hata fark ederseniz veya eksik bir konu eklemek isterseniz, ilgili
 
 ## Kaynakça
 
-T3 Gemstone resmi site: https://www.t3gemstone.org/software
-T3 Gemstone dokümantasyon: https://docs.t3gemstone.org/tr/quickstart
-ArduPilot T3 Gemstone fork: https://github.com/t3gemstone/ardupilot
+>T3 Gemstone resmi site: https://www.t3gemstone.org/software
+>T3 Gemstone dokümantasyon: https://docs.t3gemstone.org/tr/quickstart
+>ArduPilot T3 Gemstone fork: https://github.com/t3gemstone/ardupilot
