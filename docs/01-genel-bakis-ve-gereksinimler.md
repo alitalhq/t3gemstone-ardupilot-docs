@@ -7,10 +7,30 @@ Windows 11 işletim sistemli bir bilgisayar üzerinden yürütülmüştür.
 
 ## Gerekli Donanım
 
-- T3 Gemstone O1 geliştirme kartı
+- T3 Gemstone O1 geliştirme kartı (model dizesi: `T3 Gemstone O1 Obsidian`)
 - USB Type-C kablosu (DFU modda karta bağlanmak ve seri konsol/ağ için)
 - Ethernet kablosu (internet paylaşımı için, opsiyonel)
 - Windows 11 çalışan bir bilgisayar
+- RC alıcı (iBUS/SBUS) — kumanda ile uçuş denemesi yapılacaksa
+
+### Kartın Üzerindeki Sensörler
+
+Bu rehberde kullanılan kartın doğrulanmış sensör dizilimi:
+
+| Aygıt | Çip | Yol |
+|---|---|---|
+| IMU (ivme + jiro) | ICM-20948 | `/dev/spidev0.3` |
+| Pusula | AK09916 (ICM-20948 içinde) | — |
+| Barometre | LPS22DF | `/dev/spidev0.1` |
+| Sıcaklık / nem | HDC2010 | I2C |
+| CAN | m_can + TCAN1462-Q1 | `can0` |
+
+Bu listenin nasıl doğrulandığı ve device tree'de yazandan nerede
+ayrıldığı [6. bölümdedir](06-donanim-envanteri-ve-sensorler.md).
+
+GPS:
+
+...
 
 ## Gerekli Yazılımlar
 
@@ -28,10 +48,21 @@ Windows 11 işletim sistemli bir bilgisayar üzerinden yürütülmüştür.
 5. ArduPilot kaynak kodu indirilip WSL üzerinden cross-compile
    (çapraz derleme) ile derlenir.
 6. Derlenen binary Gemstone'a aktarılıp çalıştırılır.
+7. Kartta fiilen takılı sensörler tespit edilir; barometre ve PWM
+   kanal haritası için kaynak kodu düzeltmeleri uygulanır.
+8. PWM pinlerini başlığa çıkaran device tree overlay'leri kurulur.
+9. MAVLink taşımaları ve RC girişi yapılandırılır, systemd servisi
+   kurulur.
+10. Sensörler doğrulanır, kalibrasyon yapılır ve uçuş öncesi riskler
+    gözden geçirilir.
 
-Bu altı adım sırasıyla bu dokümanın 2'den 5'e kadar olan
-bölümlerinde ayrıntılandırılmıştır; 6. bölüm ise sık karşılaşılan
-hataların ve çözümlerinin özet tablosunu içerir.
+Bu adımlar 2'den 11'e kadar olan bölümlerde ayrıntılandırılmıştır;
+12. bölüm ise sık karşılaşılan hataların ve çözümlerinin özet
+tablosunu içerir.
+
+> **Nerede biter, nerede başlar:** 5. bölümün sonunda binary kartta
+> çalışır durumdadır ancak barometre bulunamaz, PWM kanalları açılmaz
+> ve RC girişi görünmez. 6–11. bölümler bu üç engeli kaldırır.
 
 ## Bu Rehber ile T3'ün Resmi ArduPilot Sayfası Arasındaki Fark
 

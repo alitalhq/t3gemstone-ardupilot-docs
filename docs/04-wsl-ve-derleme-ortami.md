@@ -83,6 +83,16 @@ bu submodule'lerin tamamını indirir:
 git submodule update --init --recursive
 ```
 
+> **Eksik submodule belirtisi:** `modules/DroneCAN` veya `modules/lwip`
+> indirilmemişse derleme `dronecangen` ya da `AP_Networking`
+> aşamasında kırılır. İkisi de bu kartla ilgisizdir, yalnızca ortam
+> eksikliğidir. Gerekirse tek tek çekin:
+>
+> ```bash
+> git submodule update --init --recursive modules/DroneCAN
+> git submodule update --init --recursive modules/lwip
+> ```
+
 <p align="center">
   <img src="images/04-wsl-ve-derleme/03-submodule-indirme.png" width="480" alt="Submodule indirme işlemi">
   <br>
@@ -171,8 +181,28 @@ Derleme öncesi kart için proje yapılandırılır, ardından ArduCopter
 derlenir:
 
 ```bash
-./waf configure --board=t3-gem-o1
+./waf configure --board=t3-gem-o1 --static
 ./waf copter
+```
+
+> ### ⚠ `--static` bayrağını baştan verin
+>
+> Bu bayrak olmadan üretilen binary kartta çalışmaz; WSL'in GLIBC
+> sürümü karttakinden yeni olduğu için `GLIBC_2.43 not found` hatası
+> alınır. Ayrıntısı ve doğrulaması
+> [5. bölümdedir](05-karta-aktarim-ve-calistirma.md).
+>
+> `--static` **`configure` aşamasında** verilir ve kalıcıdır;
+> sonradan eklemek için `configure`'u tekrar çalıştırmak gerekir.
+
+Ayrıca `empy` ve `pexpect` dışında `future` ile `intelhex` paketleri de
+gerekebilir. Sistemi kirletmemek isterseniz izole bir venv kullanın:
+
+```bash
+python3 -m venv /tmp/apvenv
+/tmp/apvenv/bin/pip install empy==3.3.4 pexpect future intelhex
+/tmp/apvenv/bin/python ./waf configure --board=t3-gem-o1 --static
+/tmp/apvenv/bin/python ./waf copter
 ```
 
 <p align="center">

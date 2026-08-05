@@ -31,7 +31,12 @@ ldd --version
 ```
 
 Derleme ortamındaki (WSL) GLIBC sürümü, kartınkinden daha yeni ise,
-dinamik olarak derlenen binary kartta çalışmaz.
+dinamik olarak derlenen binary kartta çalışmaz. Doğrulanmış durum:
+
+| Ortam | GLIBC |
+|---|---|
+| Kart (Ubuntu 24.04) | **2.39** — `ldd (Ubuntu GLIBC 2.39-0ubuntu8) 2.39` |
+| Derleme host'u | 2.43 |
 
 ### Çözüm: Statik Link (`--static`)
 
@@ -48,7 +53,15 @@ temizler ve `--static` bayrağıyla yeniden derler:
 ```
 
 Statik link ile derlenen binary'nin dosya boyutu, dinamik link ile
-derlenen binary'ye göre daha büyük olur; bu beklenen bir durumdur.
+derlenen binary'ye göre daha büyük olur; ölçülen değer **5.0 MB →
+14.0 MB**'dır ve bu beklenen bir durumdur.
+
+Sonucu doğrulayın:
+
+```bash
+file build/t3-gem-o1/bin/arducopter
+# ELF 64-bit LSB executable, ARM aarch64, statically linked
+```
 
 > **Not:** Alternatif bir çözüm olarak, WSL üzerinde kartla birebir
 > aynı Ubuntu sürümünü kullanan bir Docker container'ı içinde derleme
@@ -148,16 +161,36 @@ sudo /opt/ardupilot/bin/arducopter \
   --storage-directory /opt/ardupilot/var/storage
 ```
 
-## Sıradaki Adım: Kalıcı Kurulum
+> Bu komut yalnızca binary'nin ayağa kalktığını görmek içindir; bu
+> aşamada barometre bulunamayacak ve PWM kanalları açılmayacaktır.
+> Yer istasyonuna gerçekten bağlanan yapılandırma
+> [9.](09-mavlink-ve-rc-girisi.md) ve [10. bölümdedir](10-servis-ve-yer-istasyonu.md).
+> Dizin yolları `hwdef.dat` içinde zaten sabitlenmiş olduğu için
+> `--log-directory` gibi bayraklar aslında gerekli değildir.
+
+## Sıradaki Adım: Donanımın Çalışır Hâle Getirilmesi
 
 Buradaki adımlar, derlenen binary'nin karta doğru şekilde
-aktarıldığını doğrulamak içindir. Kartı her açıldığında ArduCopter'ı
-otomatik başlatan bir **systemd servisi** olarak kalıcı şekilde
-kurmak, device-tree overlay yapılandırmasını yapmak ve RC girişi/
-telemetri (SBUS, QGroundControl) bağlantısını kurmak için T3'ün resmi
-ArduPilot dokümantasyonuna bakınız:
-[docs.t3gemstone.org/tr/projects/ardupilot](https://docs.t3gemstone.org/tr/projects/ardupilot).
+aktarıldığını doğrulamak içindir. `--help` çıktısının görünmesi
+ArduPilot'un **uçuşa hazır** olduğu anlamına gelmez: bu noktada
+barometre henüz bulunamaz, PWM kanalları açılmaz ve RC girişi
+görünmez.
+
+Bundan sonraki bölümler bu engelleri sırayla kaldırır:
+
+| Bölüm | Konu |
+|---|---|
+| [6](06-donanim-envanteri-ve-sensorler.md) | Kartta fiilen takılı sensörlerin tespiti ve `hwdef.dat` |
+| [7](07-kaynak-kodu-duzeltmeleri.md) | LPS22DF barometre desteği ve PWM kanal haritası düzeltmesi |
+| [8](08-device-tree-overlay-pwm.md) | PWM pinlerini başlığa çıkaran device tree overlay'leri |
+| [9](09-mavlink-ve-rc-girisi.md) | MAVLink taşımaları ve RC (iBUS/SBUS) girişi |
+| [10](10-servis-ve-yer-istasyonu.md) | systemd servisi, parametreler, yer istasyonu |
+| [11](11-dogrulama-ve-kalibrasyon.md) | Doğrulama, kalibrasyon ve uçuş öncesi riskler |
+
+> APT deposundan kurulum ve T3'ün resmi yapılandırma önerileri için:
+> [docs.t3gemstone.org/tr/projects/ardupilot](https://docs.t3gemstone.org/tr/projects/ardupilot).
 
 ---
 
-Devam etmek için [06-sorun-giderme.md](06-sorun-giderme.md).
+Devam etmek için
+[06-donanim-envanteri-ve-sensorler.md](06-donanim-envanteri-ve-sensorler.md).
